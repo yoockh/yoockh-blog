@@ -49,24 +49,24 @@ interface LevelConfig {
 const GAME_CONFIG: Record<Level, LevelConfig> = {
   Junior: {
     bugs: ['Bug', 'Error', 'Typo', '404', 'NaN', 'null'],
-    spawnRate: 2000,
-    maxBugs: 4,
+    spawnRate: 2500,
+    maxBugs: 3,
     winScore: 150,
-    bugSpeed: { min: 0.5, max: 1 },
+    bugSpeed: { min: 0.2, max: 0.4 },
   },
   Mid: {
     bugs: ['Race Condition', 'Memory Leak', 'Deadlock', 'Timeout', 'CORS', 'SQL Injection'],
-    spawnRate: 1500,
-    maxBugs: 6,
+    spawnRate: 2000,
+    maxBugs: 4,
     winScore: 300,
-    bugSpeed: { min: 0.8, max: 1.5 },
+    bugSpeed: { min: 0.35, max: 0.6 },
   },
   Senior: {
     bugs: ['Kernel Panic', 'Stack Overflow', 'Heap Corruption', 'Segfault'],
-    spawnRate: 1200,
+    spawnRate: 1500,
     maxBugs: 5,
     winScore: 500,
-    bugSpeed: { min: 1, max: 2 },
+    bugSpeed: { min: 0.5, max: 0.8 },
     boss: { text: 'SERVER DOWN', health: 10 },
   },
 }
@@ -206,29 +206,29 @@ BulletProjectile.displayName = 'BulletProjectile'
 // IDLE SCREEN COMPONENT
 // ============================================
 const IdleScreen = memo(({ onStart }: { onStart: () => void }) => (
-  <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-void/90">
+  <div className="absolute inset-0 flex flex-col items-center justify-start p-3 md:p-4 bg-void/90 overflow-y-auto">
     {/* Terminal style header */}
-    <div className="w-full max-w-xs mb-6">
-      <div className="flex items-center gap-2 mb-2">
+    <div className="w-full max-w-xs mt-2 mb-3 md:mb-6 flex-shrink-0">
+      <div className="flex items-center gap-2 mb-1">
         <div className="w-2 h-2 rounded-full bg-red-500" />
         <div className="w-2 h-2 rounded-full bg-yellow-500" />
         <div className="w-2 h-2 rounded-full bg-green-500" />
-        <span className="ml-2 text-gray-500 font-mono text-[10px]">bug_crusher.sh</span>
+        <span className="ml-2 text-gray-500 font-mono text-[9px] md:text-[10px]">bug_crusher.sh</span>
       </div>
-      <div className="bg-void-light rounded-lg p-3 border border-white/10 font-mono text-[10px] md:text-xs">
+      <div className="bg-void-light rounded-lg p-2 md:p-3 border border-white/10 font-mono text-[9px] md:text-xs">
         <p className="text-gray-500">$ ./init_debug_session</p>
-        <p className="text-cyber-green mt-1">&gt; Loading modules...</p>
+        <p className="text-cyber-green mt-0.5">&gt; Loading modules...</p>
         <p className="text-cyber-blue">&gt; yoockh-bot ready</p>
         <p className="text-yellow-400">&gt; Bugs detected: <span className="text-red-400">CRITICAL</span></p>
-        <p className="text-gray-400 mt-2">$ _<span className="animate-terminal-blink">▊</span></p>
+        <p className="text-gray-400 mt-1">$ _<span className="animate-terminal-blink">▊</span></p>
       </div>
     </div>
 
     {/* Game title */}
-    <h3 className="text-xl md:text-2xl font-bold text-white mb-2 text-center">
+    <h3 className="text-lg md:text-2xl font-bold text-white mb-1 text-center flex-shrink-0">
       <span className="text-gradient">Bug</span>Crusher
     </h3>
-    <p className="text-gray-400 text-xs md:text-sm mb-6 text-center font-mono">
+    <p className="text-gray-400 text-[10px] md:text-sm mb-3 md:mb-6 text-center font-mono flex-shrink-0">
       Defend the server from bugs!
     </p>
 
@@ -237,37 +237,37 @@ const IdleScreen = memo(({ onStart }: { onStart: () => void }) => (
       onClick={onStart}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className="px-6 py-3 bg-cyber-green/20 border border-cyber-green text-cyber-green font-mono text-sm rounded-lg hover:bg-cyber-green/30 transition-colors shadow-[0_0_20px_rgba(0,255,136,0.3)]"
+      className="px-4 md:px-6 py-2 md:py-3 bg-cyber-green/20 border border-cyber-green text-cyber-green font-mono text-xs md:text-sm rounded-lg hover:bg-cyber-green/30 transition-colors shadow-[0_0_20px_rgba(0,255,136,0.3)] flex-shrink-0"
     >
       {">"} START DEBUGGING
     </motion.button>
 
     {/* Controls instructions - Terminal style */}
-    <div className="mt-6 w-full max-w-sm">
+    <div className="mt-3 md:mt-6 w-full max-w-sm pb-2 flex-shrink-0">
       <div className="bg-void-light rounded-lg border border-white/10 overflow-hidden">
         {/* Terminal header */}
-        <div className="flex items-center gap-2 px-3 py-2 bg-void border-b border-white/10">
-          <div className="w-2 h-2 rounded-full bg-red-500" />
-          <div className="w-2 h-2 rounded-full bg-yellow-500" />
-          <div className="w-2 h-2 rounded-full bg-green-500" />
-          <span className="ml-2 text-gray-500 font-mono text-[10px]">controls.md</span>
+        <div className="flex items-center gap-2 px-2 md:px-3 py-1.5 md:py-2 bg-void border-b border-white/10">
+          <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-red-500" />
+          <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-yellow-500" />
+          <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-green-500" />
+          <span className="ml-1 md:ml-2 text-gray-500 font-mono text-[8px] md:text-[10px]">controls.md</span>
         </div>
         
         {/* Terminal content */}
-        <div className="p-4 font-mono text-[11px] space-y-3">
+        <div className="p-2 md:p-4 font-mono text-[9px] md:text-[11px] space-y-2 md:space-y-3">
           <div>
-            <p className="text-cyber-purple mb-1">{"## Desktop"}</p>
-            <div className="pl-2 space-y-1 text-gray-400">
-              <p><span className="text-cyber-blue">{">"}</span> <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px] border border-white/20">←</kbd> <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px] border border-white/20">→</kbd> atau <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px] border border-white/20">A</kbd> <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[10px] border border-white/20">D</kbd> untuk gerak</p>
-              <p><span className="text-cyber-blue">{">"}</span> <kbd className="px-2 py-0.5 bg-white/10 rounded text-[10px] border border-white/20">SPACE</kbd> untuk tembak</p>
+            <p className="text-cyber-purple mb-0.5 md:mb-1">{"## Desktop"}</p>
+            <div className="pl-1 md:pl-2 space-y-0.5 md:space-y-1 text-gray-400">
+              <p><span className="text-cyber-blue">{">"}</span> <kbd className="px-1 py-0.5 bg-white/10 rounded text-[8px] md:text-[10px] border border-white/20">Arrow</kbd> / <kbd className="px-1 py-0.5 bg-white/10 rounded text-[8px] md:text-[10px] border border-white/20">A D</kbd> gerak</p>
+              <p><span className="text-cyber-blue">{">"}</span> <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-[8px] md:text-[10px] border border-white/20">SPACE</kbd> tembak</p>
             </div>
           </div>
           
           <div>
-            <p className="text-cyber-green mb-1">{"## Mobile"}</p>
-            <div className="pl-2 space-y-1 text-gray-400">
-              <p><span className="text-cyber-blue">{">"}</span> Swipe kiri/kanan untuk gerak</p>
-              <p><span className="text-cyber-blue">{">"}</span> Tap layar untuk tembak</p>
+            <p className="text-cyber-green mb-0.5 md:mb-1">{"## Mobile"}</p>
+            <div className="pl-1 md:pl-2 space-y-0.5 md:space-y-1 text-gray-400">
+              <p><span className="text-cyber-blue">{">"}</span> Swipe kiri/kanan gerak</p>
+              <p><span className="text-cyber-blue">{">"}</span> Tap layar tembak</p>
             </div>
           </div>
         </div>
@@ -405,7 +405,7 @@ export default function BugCrusher() {
       const newBug: Bug = {
         id: Date.now() + Math.random(),
         x: 10 + Math.random() * 80,
-        y: -5,
+        y: -15,
         text: bugTexts[Math.floor(Math.random() * bugTexts.length)],
         speed: config.bugSpeed.min + Math.random() * (config.bugSpeed.max - config.bugSpeed.min),
         health: 1,
@@ -495,7 +495,7 @@ export default function BugCrusher() {
           const hitBugIndex = newBugs.findIndex(bug => {
             const dx = Math.abs(bullet.x - bug.x)
             const dy = Math.abs(bullet.y - bug.y)
-            const hitRadius = bug.isBoss ? 15 : 8
+            const hitRadius = bug.isBoss ? 18 : 12
             return dx < hitRadius && dy < hitRadius
           })
           
