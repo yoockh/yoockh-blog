@@ -246,7 +246,7 @@ export default function ContactSection() {
           className="mt-16 pt-8 border-t border-white/5 text-center"
         >
           <p className="text-gray-500 font-mono text-sm">
-            {"< Crafted with ❤️ by Aisiya (yoockh) © 2025 />"}
+            {"< Crafted with ❤️ by Aisiya Qutwatunnada (yoockh) © 2026 />"}
           </p>
         </motion.footer>
       </div>
