@@ -1,0 +1,15 @@
+{
+  "css.customData": [".vscode/tailwind.json"],
+  "css.validate": true,
+  "scss.validate": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
