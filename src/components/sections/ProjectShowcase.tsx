@@ -45,8 +45,8 @@ const projects: Project[] = [
     id: 'ecommerce-order',
     title: 'Distributed E-Commerce Order System',
     shortDesc: 'Modular distributed system for e-commerce with product management, orders, and payments integration',
-    longDesc: 'A modular, containerized distributed system for e-commerce with product management, order processing, and payment integration using Midtrans. Built with Python/Django backend architecture, this system features separate microservices for products, orders, and payments, all coordinated through RabbitMQ and Celery for reliable async processing.',
-    techStack: ['Python', 'Django', 'Celery', 'PostgreSQL', 'Docker', 'Supabase', 'Redis', 'RabbitMQ', 'Midtrans'],
+    longDesc: 'A modular, containerized distributed system for e-commerce with product management, order processing, and payment integration. Built with Python/Django backend architecture, this system features separate microservices for products, orders, and payments, all coordinated through Celery async task queue with Redis as message broker.',
+    techStack: ['Python', 'Django', 'Celery', 'PostgreSQL', 'Docker', 'Supabase', 'Redis'],
     features: [
       {
         icon: <Package className="w-5 h-5" />,
@@ -55,18 +55,18 @@ const projects: Project[] = [
       },
       {
         icon: <Shield className="w-5 h-5" />,
-        title: 'Payment Integration',
-        description: 'Secure payment processing via Midtrans payment gateway with webhook handling for real-time payment status updates.'
+        title: 'Order Processing',
+        description: 'Complete order lifecycle management with status tracking, inventory validation, and automated notifications.'
       },
       {
         icon: <Cpu className="w-5 h-5" />,
         title: 'Async Processing',
-        description: 'Celery workers with RabbitMQ for async order processing, payment verification, and email notifications. Reliable task queue with retry mechanism.'
+        description: 'Celery workers with Redis as message broker for async order processing and email notifications. Reliable task queue with retry mechanism.'
       },
       {
         icon: <Database className="w-5 h-5" />,
         title: 'Microservices Architecture',
-        description: 'Separate Docker containers for products, orders, and payments services. Each service has its own database and communicates via message queues.'
+        description: 'Separate Docker containers for products and orders services. Each service has its own database with Redis for caching and task queue.'
       }
     ],
     github: 'https://github.com/yoockh/Distributed-E-Commerce-Order-System',
