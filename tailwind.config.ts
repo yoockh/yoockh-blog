@@ -8,49 +8,25 @@ const config: Config = {
   ],
   safelist: [
     // Safelist dynamic color classes used in ProjectShowcase
-    'bg-cyber-blue',
-    'bg-cyber-purple',
     'bg-cyber-green',
-    'bg-cyber-blue/10',
-    'bg-cyber-purple/10',
     'bg-cyber-green/10',
-    'bg-cyber-blue/20',
-    'bg-cyber-purple/20',
     'bg-cyber-green/20',
-    'border-cyber-blue',
-    'border-cyber-purple',
     'border-cyber-green',
-    'border-cyber-blue/20',
-    'border-cyber-purple/20',
     'border-cyber-green/20',
-    'border-cyber-blue/30',
-    'border-cyber-purple/30',
     'border-cyber-green/30',
-    'border-cyber-blue/50',
-    'border-cyber-purple/50',
     'border-cyber-green/50',
-    'text-cyber-blue',
-    'text-cyber-purple',
     'text-cyber-green',
-    'hover:bg-cyber-blue/20',
-    'hover:bg-cyber-purple/20',
     'hover:bg-cyber-green/20',
-    'hover:border-cyber-blue/50',
-    'hover:border-cyber-purple/50',
     'hover:border-cyber-green/50',
-    'hover:border-cyber-blue/30',
-    'hover:border-cyber-purple/30',
     'hover:border-cyber-green/30',
-    'via-cyber-blue',
-    'via-cyber-purple',
     'via-cyber-green',
   ],
   theme: {
     extend: {
       colors: {
-        // Core Dark Theme
-        'void': '#020617',
-        'void-light': '#0f172a',
+        // Core Dark Theme — pure neutral near-black, no blue/teal tint
+        'void': '#0a0a0a',
+        'void-light': '#121212',
         'cyber': {
           blue: '#00d4ff',
           purple: '#a855f7',
@@ -117,8 +93,8 @@ const config: Config = {
         },
       },
       backgroundImage: {
-        'grid-pattern': `linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-                         linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px)`,
+        'grid-pattern': `linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`,
         'gradient-radial': 'radial-gradient(ellipse at center, var(--tw-gradient-stops))',
       },
       backgroundSize: {

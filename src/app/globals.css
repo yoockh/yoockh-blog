@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    --void: #020617;
-    --void-light: #0f172a;
+    --void: #0a0a0a;
+    --void-light: #121212;
     --cyber-blue: #00d4ff;
     --cyber-purple: #a855f7;
     --cyber-green: #00ff88;
@@ -19,9 +19,6 @@
 
   body {
     @apply bg-void text-gray-100 font-sans antialiased;
-    background-image: 
-      radial-gradient(ellipse at top, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
-      radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
   }
 
   /* Custom Scrollbar */
@@ -35,17 +32,17 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-cyber-blue/30 rounded-full;
+    @apply bg-cyber-green/30 rounded-full;
     transition: background-color 0.3s;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-cyber-blue/50;
+    @apply bg-cyber-green/50;
   }
 
   /* Selection */
   ::selection {
-    @apply bg-cyber-blue/30 text-white;
+    @apply bg-cyber-green/30 text-white;
   }
 }
 
@@ -118,11 +115,11 @@
     filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 15px currentColor);
   }
 
-  /* Grid Background */
+  /* Grid Background — pure gray, max 3% opacity */
   .grid-bg {
-    background-image: 
-      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 50px 50px;
   }
 
@@ -147,11 +144,11 @@
   .animated-border::before {
     content: '';
     @apply absolute inset-0 rounded-xl;
-    background: linear-gradient(90deg, 
-      var(--cyber-blue), 
-      var(--cyber-purple), 
-      var(--cyber-green), 
-      var(--cyber-blue));
+    background: linear-gradient(90deg,
+      var(--cyber-green),
+      rgba(0, 255, 136, 0.15),
+      var(--cyber-green),
+      rgba(0, 255, 136, 0.15));
     background-size: 300% 100%;
     animation: gradient-shift 4s linear infinite;
     z-index: -1;
@@ -170,11 +167,34 @@
     0% { background-position: 0% 50%; }
     100% { background-position: 300% 50%; }
   }
+
+  /* Subtle glitch jitter for sidebar icons */
+  .glitch-icon:hover {
+    animation: icon-glitch 0.3s steps(2, end) 1;
+  }
+
+  /* Vertical green line on the sidebar edge that subtly pulses */
+  .sidebar-pulse-line {
+    animation: line-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes line-pulse {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.9; }
+  }
+
+  @keyframes icon-glitch {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-1px, 1px); }
+    50% { transform: translate(1px, -1px); }
+    75% { transform: translate(-1px, -1px); }
+    100% { transform: translate(0, 0); }
+  }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-cyber-blue via-cyber-purple to-cyber-green bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-cyber-green via-emerald-300 to-cyber-green bg-clip-text text-transparent;
   }
 
   .hover-scale {
@@ -187,6 +207,6 @@
 
   .hover-lift:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
   }
 }

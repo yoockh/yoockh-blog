@@ -80,20 +80,20 @@ export default function ContactSection() {
 
               <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-cyber-blue/10 border border-cyber-blue/20 flex items-center justify-center">
-                    <Mail className="w-5 h-5 text-cyber-blue" />
+                  <div className="w-10 h-10 rounded-lg bg-cyber-green/10 border border-cyber-green/20 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-cyber-green" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Email</p>
-                    <a href="mailto:yaya45chan@gmail.com" className="text-white hover:text-cyber-blue transition-colors">
+                    <a href="mailto:yaya45chan@gmail.com" className="text-white hover:text-cyber-green transition-colors">
                       yaya45chan@gmail.com
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-cyber-purple/10 border border-cyber-purple/20 flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-cyber-purple" />
+                  <div className="w-10 h-10 rounded-lg bg-cyber-green/10 border border-cyber-green/20 flex items-center justify-center">
+                    <MapPin className="w-5 h-5 text-cyber-green" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Location</p>
@@ -123,7 +123,7 @@ export default function ContactSection() {
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://www.instagram.com/yoo.chan45"
+                  href="https://www.instagram.com/yoockh.dev"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 rounded-lg bg-white/5 border border-white/10 hover:border-[#E4405F]/50 hover:bg-[#E4405F]/10 transition-all text-[#E4405F] icon-glow"
@@ -181,7 +181,7 @@ export default function ContactSection() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyber-blue/50 focus:bg-white/10 text-white placeholder-gray-500 outline-none transition-all font-mono"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyber-green/50 focus:bg-white/10 text-white placeholder-gray-500 outline-none transition-all font-mono"
                 />
               </div>
               <div>
@@ -194,7 +194,7 @@ export default function ContactSection() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="john@example.com"
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyber-blue/50 focus:bg-white/10 text-white placeholder-gray-500 outline-none transition-all font-mono"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyber-green/50 focus:bg-white/10 text-white placeholder-gray-500 outline-none transition-all font-mono"
                 />
               </div>
               <div>
@@ -207,7 +207,7 @@ export default function ContactSection() {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Your message here..."
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyber-blue/50 focus:bg-white/10 text-white placeholder-gray-500 outline-none transition-all resize-none font-mono"
+                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-cyber-green/50 focus:bg-white/10 text-white placeholder-gray-500 outline-none transition-all resize-none font-mono"
                 />
               </div>
               
@@ -228,7 +228,7 @@ export default function ContactSection() {
               <button
                 type="submit"
                 disabled={formState === 'loading'}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cyber-blue text-void font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-cyber-green text-void font-semibold shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:shadow-[0_0_25px_rgba(0,255,136,0.5)] hover:opacity-90 transition-all disabled:opacity-50"
               >
                 <Send className="w-4 h-4" />
                 {formState === 'loading' ? 'Sending...' : 'Send Message'}

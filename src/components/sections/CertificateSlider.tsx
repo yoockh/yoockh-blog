@@ -58,8 +58,8 @@ export default function CertificateSlider() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 mb-4">
-            <Award className="w-6 h-6 text-cyber-purple" />
-            <span className="text-cyber-purple font-mono text-sm">Achievements</span>
+            <Award className="w-6 h-6 text-cyber-green" />
+            <span className="text-cyber-green font-mono text-sm">Achievements</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             <span className="text-white">Certifications &</span>
@@ -109,7 +109,7 @@ export default function CertificateSlider() {
                 className="group relative flex-shrink-0 w-72 md:w-80 cursor-pointer"
                 onClick={() => setSelectedCert({ name: cert.name, image: cert.image })}
               >
-                <div className="glass-card p-3 border border-white/5 hover:border-cyber-purple/30 transition-all duration-300 hover-lift">
+                <div className="glass-card p-3 border border-white/5 hover:border-cyber-green/30 transition-all duration-300 hover-lift">
                   {/* Certificate Image Container */}
                   <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-void-light">
                     <Image
@@ -120,7 +120,7 @@ export default function CertificateSlider() {
                     />
 
                     {/* Hover overlay - subtle glow effect */}
-                    <div className="absolute inset-0 bg-cyber-purple/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-cyber-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
 
                   {/* Certificate Info */}
@@ -137,7 +137,7 @@ export default function CertificateSlider() {
       </div>
 
       {/* Pause indicator */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: isPaused ? 1 : 0 }}
         className="text-center mt-4"
@@ -146,6 +146,9 @@ export default function CertificateSlider() {
           ⏸ Paused - Move cursor away to resume
         </span>
       </motion.div>
+
+      {/* Open space below the marquee where the 3D character parks */}
+      <div className="hidden md:block h-[45vh]" aria-hidden />
 
       {/* Certificate Modal */}
       <AnimatePresence>
@@ -162,13 +165,13 @@ export default function CertificateSlider() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative max-w-4xl w-full glass-card p-4 border border-cyber-purple/30"
+              className="relative max-w-4xl w-full glass-card p-4 border border-cyber-green/30"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
               <button
                 onClick={() => setSelectedCert(null)}
-                className="absolute -top-3 -right-3 z-10 p-2 rounded-full bg-void border border-white/20 text-white hover:border-cyber-purple/50 hover:text-cyber-purple transition-colors"
+                className="absolute -top-3 -right-3 z-10 p-2 rounded-full bg-void border border-white/20 text-white hover:border-cyber-green/50 hover:text-cyber-green transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

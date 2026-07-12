@@ -1,26 +1,30 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { 
-  ExternalLink, 
-  Github, 
-  X, 
-  Zap, 
-  Database, 
-  Shield, 
+import { useState, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
+import {
+  ExternalLink,
+  Github,
+  X,
+  Zap,
+  Database,
+  Shield,
   Cpu,
   Server,
-  GitBranch,
   Box,
   Package,
   Settings,
-  Code,
   FileText,
   Clock,
-  Users
+  Users,
+  BrainCircuit,
+  QrCode,
+  ScanText,
+  Gavel,
+  Webhook,
+  CloudUpload,
+  TestTube2,
+  GitBranch,
 } from 'lucide-react'
 
 interface Project {
@@ -34,150 +38,234 @@ interface Project {
     title: string
     description: string
   }[]
-  github: string
-  demo?: string
-  image?: string
+  link: string
+  isGithub: boolean
   color: string
 }
 
 const projects: Project[] = [
   {
+    id: 'edusaku',
+    title: 'Edusaku — Offline AI Learning Assistant',
+    shortDesc:
+      'Offline-first AI education platform powered by Google Gemma 4 running entirely on local hardware',
+    longDesc:
+      'Built an offline-first AI education platform for students and teachers in low-connectivity regions, powered by Google Gemma 4 running entirely on local hardware, no internet or API keys required. Engineered a full offline RAG pipeline (OCR → embeddings → local vector store → grounded inference) and a zero-config QR-based device pairing system. Submitted to the Kaggle x Google Gemma 4 Good Hackathon.',
+    techStack: [
+      'Node.js',
+      'Express',
+      'React 19',
+      'React Native',
+      'Ollama (Gemma 4)',
+      'Tesseract.js',
+      'MiniLM',
+      'Vectra RAG',
+      'Tailwind CSS',
+    ],
+    features: [
+      {
+        icon: <BrainCircuit className="w-5 h-5" />,
+        title: 'Fully Offline AI',
+        description:
+          'Google Gemma 4 runs on local hardware via Ollama — no internet connection or API keys required, built for low-connectivity regions.',
+      },
+      {
+        icon: <ScanText className="w-5 h-5" />,
+        title: 'Offline RAG Pipeline',
+        description:
+          'End-to-end local pipeline: OCR with Tesseract.js, MiniLM embeddings, Vectra vector store, and grounded inference on-device.',
+      },
+      {
+        icon: <QrCode className="w-5 h-5" />,
+        title: 'QR Device Pairing',
+        description:
+          'Zero-config QR-based pairing connects student and teacher devices over the local network with no setup steps.',
+      },
+      {
+        icon: <Users className="w-5 h-5" />,
+        title: 'Students & Teachers',
+        description:
+          'Dedicated flows for both students and teachers, shipped as a web app plus a React Native mobile companion.',
+      },
+    ],
+    link: 'https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/new-writeup-1779068817198',
+    isGithub: false,
+    color: 'cyber-green',
+  },
+  {
     id: 'ecommerce-order',
     title: 'Distributed E-Commerce Order System',
-    shortDesc: 'Modular distributed system for e-commerce with product management, orders, and payments integration',
-    longDesc: 'A modular, containerized distributed system for e-commerce with product management, order processing, and payment integration. Built with Python/Django backend architecture, this system features separate microservices for products, orders, and payments, all coordinated through Celery async task queue with Redis as message broker.',
+    shortDesc:
+      'Modular distributed system for e-commerce with product management, orders, and payments integration',
+    longDesc:
+      'Modular distributed system for e-commerce with product management, orders, and payments integration. Separate services for products, orders, and payments are coordinated through the Celery async task queue with Redis as message broker, all containerized with Docker.',
     techStack: ['Python', 'Django', 'Celery', 'PostgreSQL', 'Docker', 'Supabase', 'Redis'],
     features: [
       {
         icon: <Package className="w-5 h-5" />,
         title: 'Product Management',
-        description: 'Full CRUD for products with Supabase storage for product images. RESTful endpoints with proper validation and error handling.'
+        description:
+          'Full CRUD for products with Supabase storage for product images. RESTful endpoints with proper validation and error handling.',
       },
       {
         icon: <Shield className="w-5 h-5" />,
         title: 'Order Processing',
-        description: 'Complete order lifecycle management with status tracking, inventory validation, and automated notifications.'
+        description:
+          'Complete order lifecycle management with status tracking, inventory validation, and automated notifications.',
       },
       {
         icon: <Cpu className="w-5 h-5" />,
         title: 'Async Processing',
-        description: 'Celery workers with Redis as message broker for async order processing and email notifications. Reliable task queue with retry mechanism.'
+        description:
+          'Celery workers with Redis as message broker for async order processing and email notifications, with a reliable retry mechanism.',
       },
       {
         icon: <Database className="w-5 h-5" />,
         title: 'Microservices Architecture',
-        description: 'Separate Docker containers for products and orders services. Each service has its own database with Redis for caching and task queue.'
-      }
+        description:
+          'Separate Docker containers per service, each with its own database, plus Redis for caching and the task queue.',
+      },
     ],
-    github: 'https://github.com/yoockh/Distributed-E-Commerce-Order-System',
-    color: 'cyber-blue'
+    link: 'https://github.com/yoockh/Distributed-E-Commerce-Order-System',
+    isGithub: true,
+    color: 'cyber-green',
   },
   {
     id: 'youth-donate',
-    title: 'Youth-Donate-Rise-API',
-    shortDesc: 'RESTful API for a donation platform enabling users to create, manage, and donate to campaigns',
-    longDesc: 'A RESTful API powering a youth-focused donation platform built with Golang and Echo framework. Features JWT authentication, campaign management with photo galleries, donation tracking, and custom error handling. Deployed on Render with PostgreSQL database.',
-    techStack: ['Golang', 'Echo', 'PostgreSQL', 'JWT', 'Swagger', 'Docker', 'Render'],
+    title: 'Youth Donate Rise API — Donation & Auction Platform',
+    shortDesc:
+      'Backend for a donation and auction management system with real-time bidding and payment webhooks',
+    longDesc:
+      'Built backend for a donation and auction management system with real-time bidding via Redis caching, automated auction winner determination, and Midtrans payment webhook handling. Deployed to GCP Cloud Run with multi-role access.',
+    techStack: ['Golang', 'Echo', 'PostgreSQL', 'Redis', 'GCP Cloud Run', 'Midtrans', 'Docker'],
     features: [
       {
+        icon: <Gavel className="w-5 h-5" />,
+        title: 'Real-Time Bidding',
+        description:
+          'Auction bidding backed by Redis caching for fast reads, with automated winner determination when auctions close.',
+      },
+      {
+        icon: <Webhook className="w-5 h-5" />,
+        title: 'Payment Webhooks',
+        description:
+          'Midtrans payment integration with webhook handling for reliable, asynchronous payment status updates.',
+      },
+      {
         icon: <Users className="w-5 h-5" />,
-        title: 'User Authentication',
-        description: 'JWT-based authentication with refresh tokens, user registration, and profile management with avatar upload support.'
+        title: 'Multi-Role Access',
+        description:
+          'Role-based access separating donors, campaign owners, and administrators across donation and auction flows.',
       },
       {
-        icon: <Server className="w-5 h-5" />,
-        title: 'Campaign Management',
-        description: 'Full CRUD for donation campaigns with multi-image galleries. Users can create campaigns, set goals, and track progress in real-time.'
+        icon: <CloudUpload className="w-5 h-5" />,
+        title: 'Cloud Run Deployment',
+        description:
+          'Containerized with Docker and deployed to GCP Cloud Run for scalable, serverless operation.',
+      },
+    ],
+    link: 'https://github.com/yoockh/Youth-Donate-Rise-API',
+    isGithub: true,
+    color: 'cyber-green',
+  },
+  {
+    id: 'go-game-rental',
+    title: 'Go Game Rental API',
+    shortDesc:
+      'REST API for a physical game rental platform with multi-role RBAC, JWT auth, and full payment flow',
+    longDesc:
+      'REST API for a physical game rental platform with multi-role RBAC, JWT auth, full booking and payment flow with Midtrans. Achieved 78.5% unit test coverage on auth handler.',
+    techStack: ['Golang', 'Echo', 'PostgreSQL', 'Supabase', 'Midtrans', 'SendGrid', 'Swagger', 'Docker'],
+    features: [
+      {
+        icon: <Shield className="w-5 h-5" />,
+        title: 'Multi-Role RBAC',
+        description:
+          'JWT authentication with role-based access control separating admin inventory management from user rentals.',
       },
       {
-        icon: <Box className="w-5 h-5" />,
-        title: 'Donation Processing',
-        description: 'Secure donation endpoints with transaction tracking. Users can view donation history and campaigns can display donor lists.'
+        icon: <Clock className="w-5 h-5" />,
+        title: 'Booking & Payment Flow',
+        description:
+          'Complete booking workflow with Midtrans payment integration and SendGrid transactional emails.',
+      },
+      {
+        icon: <TestTube2 className="w-5 h-5" />,
+        title: '78.5% Test Coverage',
+        description:
+          'Unit tests on the auth handler reaching 78.5% coverage, keeping the critical login path regression-safe.',
       },
       {
         icon: <FileText className="w-5 h-5" />,
         title: 'API Documentation',
-        description: 'Comprehensive Swagger/OpenAPI documentation for all endpoints. Clean REST design following industry best practices.'
-      }
+        description:
+          'Comprehensive Swagger/OpenAPI documentation for all endpoints, following clean REST design.',
+      },
     ],
-    github: 'https://github.com/yoockh/Youth-Donate-Rise-API',
-    color: 'cyber-purple'
-  },
-  {
-    id: 'videogame-rental',
-    title: 'Video Game Rental API',
-    shortDesc: 'Backend API for video game rental management with user authentication and rental tracking',
-    longDesc: 'A backend REST API for a video game rental service built with Golang and Echo framework. Implements clean architecture with repository patterns, service layers, and handlers. Features include game inventory management, user authentication, rental transactions, and return processing.',
-    techStack: ['Golang', 'Echo', 'PostgreSQL', 'JWT', 'Docker', 'Swagger'],
-    features: [
-      {
-        icon: <Database className="w-5 h-5" />,
-        title: 'Game Inventory',
-        description: 'Manage video game catalog with availability tracking, pricing, and detailed game information including platform and genre.'
-      },
-      {
-        icon: <Clock className="w-5 h-5" />,
-        title: 'Rental System',
-        description: 'Complete rental workflow: browse available games, create rentals with due dates, process returns, and calculate late fees.'
-      },
-      {
-        icon: <Shield className="w-5 h-5" />,
-        title: 'Auth & Authorization',
-        description: 'JWT authentication with role-based access control. Admins manage inventory while users handle their own rentals.'
-      },
-      {
-        icon: <Code className="w-5 h-5" />,
-        title: 'Clean Architecture',
-        description: 'Well-structured codebase following repository pattern, dependency injection, and separation of concerns for maintainability.'
-      }
-    ],
-    github: 'https://github.com/yoockh/Video-Game-Rental-API',
-    color: 'cyber-green'
+    link: 'https://github.com/yoockh/go-game-rental-api',
+    isGithub: true,
+    color: 'cyber-green',
   },
   {
     id: 'go-api-utils',
-    title: 'Go API Utils',
-    shortDesc: 'Reusable utility library for building REST APIs in Golang with common helpers and patterns',
-    longDesc: 'A collection of reusable utilities and helper functions for building REST APIs in Golang. Provides standardized response formatting, pagination helpers, validation utilities, and common middleware patterns. Designed to accelerate API development by providing battle-tested, production-ready components.',
-    techStack: ['Golang', 'Echo', 'Validator', 'JWT'],
+    title: 'go-api-utils — Open Source Go Utility Library',
+    shortDesc:
+      'Reusable open-source Go module with standardized REST API utilities for net/http and Echo',
+    longDesc:
+      'Published and maintained a reusable open-source Go module (5 versioned releases) providing standardized REST API utilities for both net/http and Echo, JWT auth, bcrypt, GORM helpers, RBAC middleware, pagination, and request/response wrappers. Zero-config drop-in use across projects.',
+    techStack: ['Golang', 'Echo', 'net/http', 'GORM', 'JWT', 'PostgreSQL'],
     features: [
       {
         icon: <Zap className="w-5 h-5" />,
-        title: 'Response Helpers',
-        description: 'Standardized JSON response formatting with consistent error structures, success responses, and HTTP status code handling.'
-      },
-      {
-        icon: <Settings className="w-5 h-5" />,
-        title: 'Pagination Utils',
-        description: 'Built-in pagination helpers with page/limit params, total count, and metadata. Works seamlessly with SQL queries.'
+        title: 'Dual Framework Support',
+        description:
+          'Standardized REST API utilities working with both net/http and Echo — request/response wrappers included.',
       },
       {
         icon: <Shield className="w-5 h-5" />,
-        title: 'Validation Helpers',
-        description: 'Request validation utilities with custom error messages, field-level validation, and integration with go-validator.'
+        title: 'Auth & RBAC Middleware',
+        description:
+          'JWT auth, bcrypt password hashing, and RBAC middleware ready to drop into any Go service.',
+      },
+      {
+        icon: <Settings className="w-5 h-5" />,
+        title: 'GORM & Pagination Helpers',
+        description:
+          'GORM helpers and pagination utilities that eliminate boilerplate across database-backed endpoints.',
       },
       {
         icon: <GitBranch className="w-5 h-5" />,
-        title: 'Middleware Patterns',
-        description: 'Common middleware implementations: JWT auth, request logging, CORS handling, rate limiting, and error recovery.'
-      }
+        title: '5 Versioned Releases',
+        description:
+          'Published and maintained as a versioned Go module with zero-config drop-in use across projects.',
+      },
     ],
-    github: 'https://github.com/yoockh/go-api-utils',
-    color: 'cyber-blue'
-  }
+    link: 'https://github.com/yoockh/go-api-utils',
+    isGithub: true,
+    color: 'cyber-green',
+  },
 ]
 
-function ProjectCard({ project, onDetailClick }: { project: Project, onDetailClick: () => void }) {
+function ProjectCard({
+  project,
+  index,
+  onDetailClick,
+}: {
+  project: Project
+  index: number
+  onDetailClick: () => void
+}) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
+  const fromRight = index % 2 === 1
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      initial={{ opacity: 0, x: fromRight ? 50 : -50 }}
+      animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: fromRight ? 50 : -50 }}
       transition={{ duration: 0.5 }}
-      className="group"
+      className={`group w-full lg:w-[46%] ${fromRight ? 'lg:ml-auto' : 'lg:mr-auto'}`}
     >
       <div className={`
         relative glass-card p-6 md:p-8
@@ -187,7 +275,7 @@ function ProjectCard({ project, onDetailClick }: { project: Project, onDetailCli
       `}>
         {/* Gradient accent */}
         <div className={`
-          absolute top-0 left-0 right-0 h-1 
+          absolute top-0 left-0 right-0 h-1
           bg-gradient-to-r from-transparent via-${project.color} to-transparent
           opacity-0 group-hover:opacity-100
           transition-opacity duration-300
@@ -200,7 +288,11 @@ function ProjectCard({ project, onDetailClick }: { project: Project, onDetailCli
           flex items-center justify-center
           group-hover:scale-110 transition-transform duration-300
         `}>
-          <Github className={`w-6 h-6 text-${project.color}`} />
+          {project.isGithub ? (
+            <Github className={`w-6 h-6 text-${project.color}`} />
+          ) : (
+            <BrainCircuit className={`w-6 h-6 text-${project.color}`} />
+          )}
         </div>
 
         {/* Title */}
@@ -216,7 +308,7 @@ function ProjectCard({ project, onDetailClick }: { project: Project, onDetailCli
         {/* Tech Stack Tags */}
         <div className="flex flex-wrap gap-2 mb-8">
           {project.techStack.map((tech) => (
-            <span 
+            <span
               key={tech}
               className="px-3 py-1 text-xs font-mono rounded-full bg-white/5 border border-white/10 text-gray-300"
             >
@@ -228,7 +320,7 @@ function ProjectCard({ project, onDetailClick }: { project: Project, onDetailCli
         {/* Action Buttons */}
         <div className="flex gap-3">
           <a
-            href={project.github}
+            href={project.link}
             target="_blank"
             rel="noopener noreferrer"
             className={`
@@ -239,8 +331,17 @@ function ProjectCard({ project, onDetailClick }: { project: Project, onDetailCli
               transition-all duration-300
             `}
           >
-            <Github className="w-4 h-4" />
-            View Code
+            {project.isGithub ? (
+              <>
+                <Github className="w-4 h-4" />
+                View Code
+              </>
+            ) : (
+              <>
+                <ExternalLink className="w-4 h-4" />
+                View Project
+              </>
+            )}
           </a>
           <button
             onClick={onDetailClick}
@@ -337,7 +438,7 @@ function ProjectModal({ project, isOpen, onClose }: { project: Project | null, i
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {project.techStack.map((tech) => (
-                        <span 
+                        <span
                           key={tech}
                           className={`px-4 py-2 rounded-lg bg-${project.color}/10 border border-${project.color}/20 text-${project.color} font-mono text-sm`}
                         >
@@ -374,25 +475,23 @@ function ProjectModal({ project, isOpen, onClose }: { project: Project | null, i
                   {/* Action Buttons */}
                   <div className="flex gap-4">
                     <a
-                      href={project.github}
+                      href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyber-blue text-void font-semibold hover:opacity-90 transition-opacity"
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl bg-cyber-green text-void font-semibold hover:opacity-90 transition-opacity"
                     >
-                      <Github className="w-5 h-5" />
-                      View on GitHub
+                      {project.isGithub ? (
+                        <>
+                          <Github className="w-5 h-5" />
+                          View on GitHub
+                        </>
+                      ) : (
+                        <>
+                          <ExternalLink className="w-5 h-5" />
+                          View Project
+                        </>
+                      )}
                     </a>
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 transition-colors"
-                      >
-                        <ExternalLink className="w-5 h-5" />
-                        Live Demo
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>
@@ -438,21 +537,22 @@ export default function ProjectShowcase() {
           </p>
         </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-          {projects.map((project) => (
-            <ProjectCard 
-              key={project.id} 
-              project={project} 
+        {/* Alternating cards around the centered 3D character */}
+        <div className="flex flex-col gap-8 lg:gap-16">
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              index={index}
               onDetailClick={() => handleDetailClick(project)}
             />
           ))}
         </div>
 
         {/* Modal */}
-        <ProjectModal 
-          project={selectedProject} 
-          isOpen={isModalOpen} 
+        <ProjectModal
+          project={selectedProject}
+          isOpen={isModalOpen}
           onClose={handleCloseModal}
         />
       </div>
