@@ -42,11 +42,14 @@ const socialLinks = [
   { icon: <PinterestIcon />, href: 'https://id.pinterest.com/yooockh/', label: 'Pinterest' },
 ]
 
+// Floating pill treatment: fully round, soft glow shadow beneath, gentle
+// lift + brightened green ring on hover
 const socialLinkClasses = clsx(
-  'p-2 rounded-lg transition-all duration-300',
-  'text-gray-500 border border-[rgba(0,255,136,0.2)]',
-  'hover:text-cyber-green hover:border-cyber-green hover:bg-cyber-green/10',
-  'hover:shadow-[0_0_10px_rgba(0,255,136,0.4)]'
+  'p-2 rounded-full transition-all duration-300',
+  'text-gray-500 border border-[rgba(0,255,136,0.2)] bg-black/40',
+  'shadow-[0_4px_12px_rgba(0,255,136,0.15)]',
+  'hover:-translate-y-0.5 hover:text-cyber-green hover:border-cyber-green hover:bg-cyber-green/10',
+  'hover:shadow-[0_6px_16px_rgba(0,255,136,0.35),0_0_0_2px_rgba(0,255,136,0.35)]'
 )
 
 export default function Navbar() {

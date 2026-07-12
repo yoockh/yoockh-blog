@@ -1,10 +1,12 @@
 import HeroSection from '@/components/sections/HeroSection'
+import GitHubSection from '@/components/sections/GitHubSection'
 import ExperienceSection from '@/components/sections/ExperienceSection'
 import EducationSection from '@/components/sections/EducationSection'
 import ProjectShowcase from '@/components/sections/ProjectShowcase'
 import CertificateSlider from '@/components/sections/CertificateSlider'
 import ContactSection from '@/components/sections/ContactSection'
 import CharacterCanvas from '@/components/three/CharacterCanvas'
+import OrbitalNav from '@/components/three/OrbitalNav'
 
 export default function Home() {
   return (
@@ -12,7 +14,9 @@ export default function Home() {
       {/* Fixed 3D character canvas — rendered first so positioned section
           content paints above it */}
       <CharacterCanvas />
+      <OrbitalNav />
       <HeroSection />
+      <GitHubSection />
       <ExperienceSection />
       <EducationSection />
       <ProjectShowcase />
