@@ -168,19 +168,9 @@
     100% { background-position: 300% 50%; }
   }
 
-  /* Subtle glitch jitter for sidebar icons */
+  /* Subtle glitch jitter for icons */
   .glitch-icon:hover {
     animation: icon-glitch 0.3s steps(2, end) 1;
-  }
-
-  /* Vertical green line on the sidebar edge that subtly pulses */
-  .sidebar-pulse-line {
-    animation: line-pulse 3s ease-in-out infinite;
-  }
-
-  @keyframes line-pulse {
-    0%, 100% { opacity: 0.25; }
-    50% { opacity: 0.9; }
   }
 
   @keyframes icon-glitch {

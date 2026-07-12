@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
@@ -27,8 +27,8 @@ type SectionId = (typeof SECTION_IDS)[number]
 // with a margin — at any resolution or aspect ratio.
 const CHAR_HALF = 1.2
 const EDGE_MARGIN = 0.35
-// Reduced size when parked in the certificates/contact sections
-const SMALL_SCALE = 0.5
+// Reduced size when parked in the certificates section
+const SMALL_SCALE = 0.6
 
 function CharacterModel() {
   const { scene } = useGLTF(MODEL_PATH)
@@ -48,15 +48,15 @@ function CharacterModel() {
 
 function CharacterRig({ children }: { children: React.ReactNode }) {
   const group = useRef<THREE.Group>(null)
-  const spin = useRef(0)
-  const spinSpeed = useRef(0)
 
   useFrame((state, delta) => {
     const g = group.current
     if (!g) return
 
     // Find the section currently crossing the viewport midline, plus the
-    // scroll progress inside the projects section for its scroll-tied spin.
+    // clamped scroll progress inside the projects section: 0 before it,
+    // 0→1 across it, and held at exactly 1 after it — it can never
+    // extrapolate past those bounds.
     const mid = window.innerHeight / 2
     let current: SectionId = 'home'
     let projectsProgress = 0
@@ -77,7 +77,6 @@ function CharacterRig({ children }: { children: React.ReactNode }) {
     // Visible world extents at the character's depth (z = 0)
     const halfW = state.viewport.width / 2
     const halfH = state.viewport.height / 2
-    const pxToWorld = state.viewport.width / state.size.width
 
     // Side offset for hero/experience, clamped so the body never leaves the
     // frame on narrow viewports
@@ -85,34 +84,38 @@ function CharacterRig({ children }: { children: React.ReactNode }) {
     // Rest the feet just above the bottom edge, full body visible
     const restY = (s: number) => -halfH + CHAR_HALF * s + EDGE_MARGIN
 
-    let anchor = { x: 0, y: restY(1), s: 1, face: 0 }
+    // Base rotation is 0 (facing forward) in every section. The only
+    // additions are: bounded cursor-follow in hero (while hovering) and
+    // education, and the scroll-tied revolution across projects. Because
+    // projectsProgress is clamped to [0, 1], the rotation is exactly 2π
+    // (≡ facing forward) in certificates/contact — never stuck backward.
+    let anchor = { x: 0, y: restY(1), s: 1 }
+    let baseRot = 0
     switch (current) {
       case 'home':
-        anchor = { x: -sideX, y: restY(1), s: 1, face: 0.55 }
+        anchor = { x: -sideX, y: restY(1), s: 1 }
+        baseRot = characterState.heroHover ? characterState.heroRot : 0
         break
       case 'experience':
-        anchor = { x: sideX, y: restY(1), s: 1, face: -0.55 }
+        anchor = { x: sideX, y: restY(1), s: 1 }
         break
       case 'education':
+        anchor = { x: 0, y: restY(1), s: 1 }
+        baseRot = characterState.pointerRot
+        break
       case 'projects':
-        anchor = { x: 0, y: restY(1), s: 1, face: 0 }
+        anchor = { x: 0, y: restY(1), s: 1 }
         break
       case 'certificates':
-        // Shrunk, centered in the open space below the marquee
-        anchor = { x: 0, y: restY(SMALL_SCALE), s: SMALL_SCALE, face: 0 }
+        // Shrunk and bottom-anchored in the space below the marquee
+        anchor = { x: 0, y: restY(SMALL_SCALE), s: SMALL_SCALE }
         break
-      case 'contact': {
-        // Park beside the centered contact card (max-w-4xl = 896px); if the
-        // viewport is too narrow to fit it fully without overlap, scale to 0
-        const cardHalf = (Math.min(896, state.size.width * 0.9) / 2) * pxToWorld
-        const cw = CHAR_HALF * SMALL_SCALE
-        const x = cardHalf + 0.25 + cw
-        const fits = x + cw + 0.15 <= halfW
-        anchor = fits
-          ? { x, y: restY(SMALL_SCALE), s: SMALL_SCALE, face: -0.4 }
-          : { x: halfW, y: restY(SMALL_SCALE), s: 0.001, face: 0 }
+      case 'contact':
+        // The contact form is the focal point: the character stays pinned
+        // at its certificates position and simply fades out — no shrinking
+        // into a corner, no flying off to the side.
+        anchor = { x: 0, y: restY(SMALL_SCALE), s: 0.001 }
         break
-      }
     }
 
     // Frame-rate independent damping toward the section anchor
@@ -121,29 +124,36 @@ function CharacterRig({ children }: { children: React.ReactNode }) {
     g.position.y = THREE.MathUtils.lerp(g.position.y, anchor.y, k)
     g.scale.setScalar(THREE.MathUtils.lerp(g.scale.x, anchor.s, k))
 
-    // Hover auto-spin winds up/down smoothly instead of snapping
-    spinSpeed.current = THREE.MathUtils.lerp(
-      spinSpeed.current,
-      characterState.hovered ? 2.5 : 0,
-      k
-    )
-    spin.current += spinSpeed.current * delta
-
-    // One full scroll-driven revolution across the projects section; the
-    // clamped progress keeps it at 0 before and 2π (≡ facing forward) after.
-    const target =
-      anchor.face + spin.current + projectsProgress * Math.PI * 2
-    g.rotation.y = THREE.MathUtils.lerp(g.rotation.y, target, k)
+    const targetRot = baseRot + projectsProgress * Math.PI * 2
+    g.rotation.y = THREE.MathUtils.lerp(g.rotation.y, targetRot, k)
   })
 
   return <group ref={group}>{children}</group>
 }
 
 export default function CharacterScene() {
+  // Gentle viewport-wide cursor tracking for the education section's
+  // cursor-follow; resets to forward-facing when the cursor leaves the page.
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      const norm = (e.clientX / window.innerWidth) * 2 - 1
+      characterState.pointerRot = THREE.MathUtils.clamp(norm, -1, 1) * 0.5
+    }
+    const onLeave = () => {
+      characterState.pointerRot = 0
+    }
+    window.addEventListener('mousemove', onMove)
+    document.documentElement.addEventListener('mouseleave', onLeave)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      document.documentElement.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
+
   return (
     <div
       aria-hidden
-      className="fixed inset-y-0 right-0 left-0 md:left-20 lg:left-24 z-0 pointer-events-none hidden md:block"
+      className="fixed inset-0 z-0 pointer-events-none hidden md:block"
     >
       <Canvas
         camera={{ position: [0, 0, 7], fov: 35 }}

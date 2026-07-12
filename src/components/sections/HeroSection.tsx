@@ -2,25 +2,55 @@
 
 import { motion } from 'framer-motion'
 import { ChevronDown, MessageCircle } from 'lucide-react'
+import {
+  SiGo,
+  SiPython,
+  SiDjango,
+  SiNodedotjs,
+  SiPostgresql,
+  SiRedis,
+  SiMongodb,
+  SiDocker,
+  SiGooglecloud,
+  SiJavascript,
+  SiTypescript,
+} from 'react-icons/si'
+import { TbApi } from 'react-icons/tb'
+import type { IconType } from 'react-icons'
 import { characterState } from '@/components/three/characterState'
 
-const techStack = [
-  'Golang',
-  'Python',
-  'Django',
-  'DRF',
-  'Node.js',
-  'PostgreSQL',
-  'Redis',
-  'MongoDB',
-  'Docker',
-  'GCP',
-  'JavaScript/TypeScript',
+const techStack: { name: string; Icon: IconType }[] = [
+  { name: 'Golang', Icon: SiGo },
+  { name: 'Python', Icon: SiPython },
+  { name: 'Django', Icon: SiDjango },
+  { name: 'DRF', Icon: TbApi },
+  { name: 'Node.js', Icon: SiNodedotjs },
+  { name: 'PostgreSQL', Icon: SiPostgresql },
+  { name: 'Redis', Icon: SiRedis },
+  { name: 'MongoDB', Icon: SiMongodb },
+  { name: 'Docker', Icon: SiDocker },
+  { name: 'GCP', Icon: SiGooglecloud },
+  { name: 'JavaScript', Icon: SiJavascript },
+  { name: 'TypeScript', Icon: SiTypescript },
 ]
 
 export default function HeroSection() {
   const scrollToContact = () => {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  // Bounded cursor-follow: cursor X within the zone maps to ±0.5 rad; the
+  // rig lerps toward it and back to 0 (forward) when the cursor leaves.
+  const handleZoneMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const norm = ((e.clientX - rect.left) / rect.width) * 2 - 1
+    characterState.heroHover = true
+    characterState.heroRot = Math.max(-1, Math.min(1, norm)) * 0.5
+  }
+
+  const handleZoneLeave = () => {
+    characterState.heroHover = false
+    characterState.heroRot = 0
   }
 
   return (
@@ -44,11 +74,12 @@ export default function HeroSection() {
 
       <div className="relative w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
         {/* Left: hover zone reserved for the 3D character (rendered on the
-            fixed canvas behind this section). Hovering it spins the model. */}
+            fixed canvas behind this section). Moving the cursor across it
+            turns the character toward the cursor. */}
         <div
-          className="hidden md:block md:w-2/5 self-stretch min-h-[60vh] cursor-pointer"
-          onMouseEnter={() => (characterState.hovered = true)}
-          onMouseLeave={() => (characterState.hovered = false)}
+          className="hidden md:block md:w-2/5 self-stretch min-h-[60vh]"
+          onMouseMove={handleZoneMove}
+          onMouseLeave={handleZoneLeave}
         />
 
         {/* Right: content */}
@@ -94,7 +125,7 @@ export default function HeroSection() {
             things that actually work.
           </motion.p>
 
-          {/* Tech stack grid */}
+          {/* Tech stack grid — brand icon to the left of each label */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -103,18 +134,19 @@ export default function HeroSection() {
           >
             {techStack.map((tech, index) => (
               <motion.span
-                key={tech}
+                key={tech.name}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 + index * 0.05 }}
-                className="px-4 py-2 rounded-lg font-mono text-sm text-cyber-green
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-sm text-cyber-green
                   bg-cyber-green/5 border border-cyber-green/40
                   shadow-[0_0_8px_rgba(0,255,136,0.15)]
                   hover:shadow-[0_0_20px_rgba(0,255,136,0.5)]
                   hover:border-cyber-green hover:bg-cyber-green/10
                   transition-all duration-300 cursor-default"
               >
-                {tech}
+                <tech.Icon className="w-4 h-4 flex-shrink-0" aria-hidden />
+                {tech.name}
               </motion.span>
             ))}
           </motion.div>

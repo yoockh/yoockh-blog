@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
-import Sidebar from '@/components/layout/Sidebar'
+import Navbar from '@/components/layout/Navbar'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -43,11 +43,11 @@ export default function RootLayout({
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-green/[0.04] rounded-full blur-3xl" />
         </div>
         
-        {/* Sidebar - Fixed */}
-        <Sidebar />
-        
-        {/* Main Content - with proper offset for sidebar */}
-        <main className="relative min-h-screen pl-0 md:pl-20 lg:pl-24 pb-24 md:pb-0">
+        {/* Top Navbar - Fixed */}
+        <Navbar />
+
+        {/* Main Content - offset below the navbar */}
+        <main className="relative min-h-screen pt-20">
           {children}
         </main>
       </body>

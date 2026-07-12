@@ -147,8 +147,9 @@ export default function CertificateSlider() {
         </span>
       </motion.div>
 
-      {/* Open space below the marquee where the 3D character parks */}
-      <div className="hidden md:block h-[45vh]" aria-hidden />
+      {/* Open space below the marquee where the 3D character parks —
+          sized to frame the character (~33vh tall) with breathing room */}
+      <div className="hidden md:block h-[40vh]" aria-hidden />
 
       {/* Certificate Modal */}
       <AnimatePresence>
