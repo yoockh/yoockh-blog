@@ -47,16 +47,20 @@ export default function OrbitalNav() {
   }, [])
 
   return (
-    <div className="hidden lg:block">
+    <div className="hidden md:block">
       {/* Keying by side makes AnimatePresence run exit (fade+shrink) on the
           old side while the new side fades in and scales up — a cross-fade,
           not a slide across the screen. */}
       <AnimatePresence>
         <motion.div
           key={isRightSide ? 'right' : 'left'}
+          // Anchored at 25% viewport height: the 3D character is bottom-
+          // anchored and never extends above ~44% of the viewport, so this
+          // band stays collision-free at any resolution (verified at 1440p
+          // and 1920p) without touching the character's own logic.
           className={clsx(
-            'fixed top-1/2 z-40 w-40 h-40',
-            isRightSide ? 'right-10' : 'left-10'
+            'fixed top-[25%] z-40 w-[170px] h-[170px]',
+            isRightSide ? 'right-8' : 'left-8'
           )}
           initial={{ opacity: 0, scale: 0.6, y: '-50%' }}
           animate={{ opacity: 1, scale: 1, y: '-50%' }}

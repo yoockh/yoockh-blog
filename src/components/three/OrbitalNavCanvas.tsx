@@ -4,6 +4,7 @@ import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import clsx from 'clsx'
 
 const SECTIONS = [
@@ -15,7 +16,9 @@ const SECTIONS = [
   { id: 'contact', label: 'contact' },
 ]
 
-const RING_RADIUS = 1.3
+const RING_RADIUS = 1.2
+const TUBE_RADIUS = 0.03
+const NODE_RADIUS = 0.06
 const LABEL_OFFSET = 0.42
 
 function scrollToSection(id: string) {
@@ -33,12 +36,12 @@ function OrbitalRing({ activeIndex }: { activeIndex: number }) {
         const dir = new THREE.Vector2(Math.cos(angle), Math.sin(angle))
         return {
           ...section,
-          position: [dir.x * RING_RADIUS, dir.y * RING_RADIUS, 0] as const,
+          position: [dir.x * RING_RADIUS, dir.y * RING_RADIUS, 0] as [number, number, number],
           labelPosition: [
             dir.x * (RING_RADIUS + LABEL_OFFSET),
             dir.y * (RING_RADIUS + LABEL_OFFSET),
             0,
-          ] as const,
+          ] as [number, number, number],
         }
       }),
     []
@@ -59,15 +62,15 @@ function OrbitalRing({ activeIndex }: { activeIndex: number }) {
 
   return (
     <group ref={group}>
-      {/* Base orbital ring */}
+      {/* Base orbital torus — visible tube thickness, emissive neon green */}
       <mesh>
-        <torusGeometry args={[RING_RADIUS, 0.025, 12, 96]} />
+        <torusGeometry args={[RING_RADIUS, TUBE_RADIUS, 16, 100]} />
         <meshStandardMaterial
-          color="#003322"
+          color="#00220f"
           emissive="#00ff88"
-          emissiveIntensity={0.9}
+          emissiveIntensity={1.6}
           transparent
-          opacity={0.45}
+          opacity={0.55}
         />
       </mesh>
 
@@ -77,22 +80,23 @@ function OrbitalRing({ activeIndex }: { activeIndex: number }) {
         return (
           <group key={node.id}>
             <mesh
-              position={node.position as unknown as THREE.Vector3}
+              position={node.position}
+              scale={isActive ? 1.8 : 1}
               onClick={() => scrollToSection(node.id)}
               onPointerOver={() => (document.body.style.cursor = 'pointer')}
               onPointerOut={() => (document.body.style.cursor = 'auto')}
             >
-              <sphereGeometry args={[isActive ? 0.14 : 0.09, 16, 16]} />
+              <sphereGeometry args={[NODE_RADIUS, 16, 16]} />
               <meshStandardMaterial
-                color="#003322"
+                color="#00220f"
                 emissive="#00ff88"
-                emissiveIntensity={isActive ? 2.2 : 0.5}
+                emissiveIntensity={isActive ? 2.4 : 0.7}
                 transparent
-                opacity={isActive ? 1 : 0.8}
+                opacity={isActive ? 1 : 0.85}
               />
             </mesh>
             <Html
-              position={node.labelPosition as unknown as THREE.Vector3}
+              position={node.labelPosition}
               center
               distanceFactor={5}
               zIndexRange={[40, 0]}
@@ -100,7 +104,7 @@ function OrbitalRing({ activeIndex }: { activeIndex: number }) {
               <button
                 onClick={() => scrollToSection(node.id)}
                 className={clsx(
-                  'font-mono text-[10px] whitespace-nowrap transition-colors duration-300',
+                  'font-mono text-[11px] whitespace-nowrap transition-colors duration-300',
                   isActive
                     ? 'text-cyber-green text-glow-green'
                     : 'text-cyber-green/50 hover:text-cyber-green'
@@ -124,22 +128,35 @@ export default function OrbitalNavCanvas({ activeIndex }: { activeIndex: number 
       gl={{ alpha: true, antialias: true }}
       style={{ overflow: 'visible' }}
     >
+      {/* The EffectComposer can't preserve canvas alpha, so match its clear
+          color to the page background — the canvas square becomes invisible */}
+      <color attach="background" args={['#0a0a0a']} />
       <ambientLight intensity={0.6} />
-      {/* Slight tilt so the orbit reads as 3D rather than a flat circle */}
-      <group rotation={[0.35, 0, 0]}>
+      {/* Tilt along X so the ring reads as an ellipse in perspective */}
+      <group rotation={[0.3, 0, 0]}>
         <OrbitalRing activeIndex={activeIndex} />
         {/* Decorative crossing orbit */}
         <mesh rotation={[1.25, 0.4, 0]}>
           <torusGeometry args={[RING_RADIUS * 1.12, 0.012, 8, 96]} />
           <meshStandardMaterial
-            color="#003322"
+            color="#00220f"
             emissive="#00ff88"
-            emissiveIntensity={0.5}
+            emissiveIntensity={0.6}
             transparent
-            opacity={0.2}
+            opacity={0.25}
           />
         </mesh>
       </group>
+      {/* Neon bloom so the emissive green actually spreads like real light.
+          No mipmapBlur: it breaks the canvas alpha channel and would paint
+          an opaque square over the page background. */}
+      <EffectComposer multisampling={0}>
+        <Bloom
+          intensity={1.3}
+          luminanceThreshold={0.15}
+          luminanceSmoothing={0.4}
+        />
+      </EffectComposer>
     </Canvas>
   )
 }
