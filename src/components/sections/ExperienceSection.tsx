@@ -19,7 +19,7 @@ const experiences: Experience[] = [
     company: 'Chronicle',
     period: 'Jan 2026 - Jul 2026 · Remote',
     description:
-      'Resolved 24 tickets across 22 merged PRs in a live production Django/DRF codebase, trusted as the intern contributor on the core-api alongside senior engineers. Reduced P99 latency on key endpoints by up to 99.99% through N+1 query elimination, proper scoping, and indexing. Traced and fixed a silent ROI fee corruption bug, delivered auto-generated ROI certificates, funeral director collaboration flow, and email bounce notification system.',
+      'Resolved 22 tickets across 24 merged PRs in a live production Django/DRF codebase, contributing directly to the core-api alongside senior engineers. Reduced P99 latency on key endpoints by up to 99.99% through N+1 query elimination, proper scoping, and indexing. Traced and fixed a silent ROI fee corruption bug, delivered auto-generated ROI certificates, funeral director collaboration flow, and email bounce notification system.',
     initial: 'C',
     logo: '/assets/logos/chronicle.png',
   },
