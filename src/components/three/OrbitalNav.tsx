@@ -54,20 +54,23 @@ export default function OrbitalNav() {
       <AnimatePresence>
         <motion.div
           key={isRightSide ? 'right' : 'left'}
-          // Anchored at 25% viewport height: the 3D character is bottom-
-          // anchored and never extends above ~44% of the viewport, so this
-          // band stays collision-free at any resolution (verified at 1440p
-          // and 1920p) without touching the character's own logic.
+          // Full-height strip hugging the viewport edge: the ring's center
+          // sits outside the viewport, so only its arc peeks in. The strip
+          // is pointer-events-none — only the node labels take clicks — so
+          // page content underneath stays fully interactive.
           className={clsx(
-            'fixed top-[25%] z-40 w-[170px] h-[170px]',
-            isRightSide ? 'right-8' : 'left-8'
+            'fixed top-0 z-30 h-screen w-[340px] pointer-events-none',
+            isRightSide ? 'right-0 origin-right' : 'left-0 origin-left'
           )}
-          initial={{ opacity: 0, scale: 0.6, y: '-50%' }}
-          animate={{ opacity: 1, scale: 1, y: '-50%' }}
-          exit={{ opacity: 0, scale: 0.6, y: '-50%' }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
         >
-          <OrbitalNavCanvas activeIndex={activeIndex} />
+          <OrbitalNavCanvas
+            activeIndex={activeIndex}
+            side={isRightSide ? 'right' : 'left'}
+          />
         </motion.div>
       </AnimatePresence>
     </div>
